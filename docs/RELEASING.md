@@ -2,8 +2,14 @@
 
 Author and publisher: **Codevia Solutions s.r.o.**
 
-The `0.1.0` local package is a verification candidate, not a published release.
-Before a public release:
+Version `0.1.0` was published through GitHub OIDC Trusted Publishing, confirmed
+by the publisher on 2026-11-13. Release tag: `v0.1.0`, commit
+`df32a573d81bf03cd9ffa78fd6e792a651c5b7bc`.
+Package: [TNID.NET 0.1.0](https://www.nuget.org/packages/TNID.NET/0.1.0).
+The local verification package hashes are historical local artifacts; they are
+not claimed to be the hashes of the CI-built published package.
+
+For subsequent releases:
 
 1. Use the confirmed target repository
    `https://github.com/CodeviaSolutions/tnid.net.git` under `CodeviaSolutions`.
@@ -14,9 +20,9 @@ Before a public release:
    format. The local official JSON is not approved for redistribution: establish
    its license before committing or packaging a copy, and include all required
    verbatim copyright and license notices wherever that material is distributed.
-3. Check the requested `TNID.NET` ID on NuGet, including ownership/reservation.
-   If unavailable, report the conflict and keep the requested name pending a
-   decision. The public page/API HTTP 404 check is recorded; it does not establish publish rights.
+3. Retain the `TNID.NET` ID and the authorized Codevia Solutions NuGet owner.
+   Choose a new, unpublished package version. The original HTTP 404 listing
+   check predates the successful first publication.
 4. Preserve the completed official-vector comparison and fixture hash recorded in
    `docs/VERIFICATION.md`; rerun it for implementation changes as described in
    `tests/EXTERNAL-VECTORS.md`. Encryption is an optional extension outside scope.
@@ -57,8 +63,10 @@ This is an individual NuGet login, not an email or the package author's company
 name. The package author remains Codevia Solutions s.r.o. Any environment
 protection rules must allow the release tag to deploy.
 
-After committing and pushing the release-ready README and workflow, publish by
-creating and pushing `v0.1.0`. The workflow checks that the tag matches the package
+The first release was triggered by `v0.1.0`. For a subsequent release, commit and
+push the updated version, README, and workflow, then create and push a new
+matching version tag. Do not move or recreate an existing release tag.
+The workflow checks that the tag matches the package
 version, runs the official vectors and both packed consumers, checks the package
 metadata and checksum, and obtains an ephemeral credential with `NuGet/login@v1`
 immediately before pushing. A failure is not silently treated as a successful

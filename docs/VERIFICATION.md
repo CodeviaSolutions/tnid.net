@@ -1,15 +1,29 @@
 # Verification results
 
 Date: 2026-11-13. Author and publisher: **Codevia Solutions s.r.o.**
-Local candidate: `TNID.NET` version `0.1.0`. Host: macOS 26.6, arm64.
+Verified library: `TNID.NET` version `0.1.0`. Local host: macOS 26.6, arm64.
+
+## Publication
+
+The publisher confirmed successful NuGet publication through GitHub OIDC Trusted
+Publishing on 2026-11-13:
+[TNID.NET 0.1.0](https://www.nuget.org/packages/TNID.NET/0.1.0).
+The local release tag `v0.1.0` resolves to commit
+`df32a573d81bf03cd9ffa78fd6e792a651c5b7bc`.
+The release workflow verifies and packs the package before its separate OIDC
+publish job. Public NuGet and GitHub Actions retrieval remains unavailable from
+this workspace, so the publication result is recorded from the publisher's
+confirmation; hosted logs and the public package bytes were not independently
+retrieved. The local package hashes below identify pre-publication verification
+artifacts and must not be used as checksums of the CI-built published package.
 
 Target repository confirmed by the user:
 `https://github.com/CodeviaSolutions/tnid.net.git`.
 Organization slug: `CodeviaSolutions`. Package repository and project metadata
 already use the matching URL `https://github.com/CodeviaSolutions/tnid.net`.
-Local Git initialization was attempted, but this workspace denies writes to
-`.git` (`Operation not permitted`); no local `origin` was created and nothing
-was pushed.
+The publisher initialized Git and pushed the source manually after sandbox
+restrictions blocked the initial Git operation. Local `origin` now matches this
+repository, and the release tag is present.
 
 ## Specification and licensing
 
@@ -59,7 +73,8 @@ The preserved archive contains the README and NOTICE from its original packing;
 they predate this follow-up's pinned provenance and vector results. Source
 materials now contain the updated evidence. The refreshed local candidate at
 `artifacts/TNID.NET.0.1.0.nupkg` includes these updated README/NOTICE files; the
-original archive remains separate for traceability. Neither has been published.
+original archive remains separate for traceability. These archives were used for
+local verification; the published package was built separately by GitHub Actions.
 
 Refreshed package SHA-256:
 `ea686ca0c09211f62e4579716010dcf6e20dda4cd0ff08f3a0c6b619acaf25e7`.
@@ -115,7 +130,9 @@ returned **HTTP 404**. This records that the requested ID was not publicly
 listed at that time. It does **not** establish registration availability,
 reservation status, or publishing rights. No ownership conflict is claimed;
 the requested ID remains `TNID.NET`. This workspace could not independently
-repeat the HTTP check because its shell network is disabled.
+repeat the HTTP check because its shell network is disabled. This historical
+pre-publication result is superseded by the publisher's successful-publication
+confirmation recorded above.
 
 ## .NET 11 package consumer
 
@@ -140,22 +157,25 @@ Microsoft's [official download page](https://dotnet.microsoft.com/en-us/download
 lists SDK 11.0.100, released 2026-11-10. Earlier download/SDK resolution failures
 are superseded by this successful execution; no network workaround was needed.
 
-## Release steps remaining
+## Verification limits and future releases
 
-- **Hosted CI:** supplied but not run on a hosted runner. It selects SDK
-  11.0.100, downloads the official JSON into the runner's temporary directory for
-  external comparison, verifies its pinned hash before testing, and checks both
-  packed consumers. It does not commit, package, or upload the fixture.
+- **Hosted logs and public package bytes:** successful Trusted Publishing was
+  reported by the publisher. This workspace could not independently retrieve
+  the hosted logs or the public package. The release workflow selects SDK
+  11.0.100, compares the official JSON externally using its pinned hash, and
+  checks both packed consumers before publishing. The fixture is not committed,
+  packaged, or uploaded as an artifact.
 - **Fixture redistribution:** no redistribution is authorized or needed for the
   completed external comparison. Keep the local JSON ignored. Establish its
   license and required notices before committing or packaging a copy.
-- **NuGet publishing rights:** a public HTTP 404 is a listing check only;
-  reservation and ownership still need confirmation before publishing.
+- **Future releases:** retain the package owner and Trusted Publishing policy;
+  update all pinned package versions before creating a new release tag.
 
 `artifacts/verification-net10.log`, `artifacts/type-safety.log`,
 `artifacts/package-only-net10.log`, and `artifacts/verification-net11.log` retain
 local execution evidence. `artifacts/verification-refreshed.log` records the full
 verification of the refreshed candidate. The environment reports
 `CODEX_SANDBOX_NETWORK_DISABLED=1`. Public upstream verification does not require
-a GitHub connector. Neither GitHub publication nor NuGet publishing was performed;
-they remain separate release steps in `docs/RELEASING.md`.
+a GitHub connector. Source publication to GitHub and NuGet Trusted Publishing
+were completed by the publisher as separate steps. Creating a GitHub Release
+entry remains a separate action, as described in `docs/RELEASING.md`.
