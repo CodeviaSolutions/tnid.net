@@ -1,0 +1,21 @@
+# .NET build and test output
+**/bin/
+**/obj/
+**/TestResults/
+*.binlog
+
+# Local packages and verification logs
+/artifacts/*
+!/artifacts/.gitkeep
+
+# User-specific IDE state
+.vs/
+*.user
+*.suo
+
+# OS and Python cache files
+.DS_Store
+__pycache__/
+
+# Local upstream fixture; redistribution license has not been established.
+/docs/test-vectors.json

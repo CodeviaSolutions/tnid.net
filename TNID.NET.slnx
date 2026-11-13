@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TNID.NET/TNID.NET.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TNID.NET.Conformance/TNID.NET.Conformance.csproj" />
+  </Folder>
+</Solution>

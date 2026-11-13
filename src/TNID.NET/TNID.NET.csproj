@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <PackageId>TNID.NET</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>Codevia Solutions s.r.o.</Authors>
+    <Company>Codevia Solutions s.r.o.</Company>
+    <Copyright>Copyright (c) 2026 Codevia Solutions s.r.o.</Copyright>
+    <Description>A minimal, dependency-free implementation of the TNID 1.0 core format.</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/CodeviaSolutions/tnid.net</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/CodeviaSolutions/tnid.net</PackageProjectUrl>
+    <PackageTags>tnid;uuid;identifiers</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../NOTICE.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
