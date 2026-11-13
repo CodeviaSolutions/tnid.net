@@ -32,9 +32,42 @@ GitHub release with the reviewed package attached. Do not include personal bios,
 additional project authors, or tool credits. The MIT notice and provenance apply.
 
 NuGet publication is another separate step: confirm package ownership, inspect the
-exact package checksum and metadata, then publish that package to NuGet using an
-authorized Codevia Solutions account. Neither GitHub nor NuGet publishing runs in
-CI. Do not assume completing one publication authorizes the other.
+exact package checksum and metadata, then publish through GitHub OIDC Trusted
+Publishing using `.github/workflows/publish.yml`. Normal CI and branch pushes do
+not publish. The release workflow runs only for version tags, verifies and packs
+the library, then publishes the exact verified artifact in a separate job.
+Do not assume publishing source to GitHub authorizes NuGet publication.
+
+## Trusted Publishing setup
+
+No long-lived API key is stored or entered. Configure NuGet's
+[Trusted Publishing policy](https://learn.microsoft.com/en-us/nuget/nuget-org/trusted-publishing):
+
+- Policy/package owner: the authorized Codevia Solutions organization on NuGet.
+- GitHub repository owner: `CodeviaSolutions`.
+- Repository: `tnid.net`.
+- Workflow file: `publish.yml` (the filename only).
+- Environment: `nuget`.
+- Package pattern: `TNID.NET`.
+- Scope: publish new packages and package versions, including the first release.
+
+In GitHub, create an environment named `nuget` and set the repository or environment
+variable `NUGET_USER` to the NuGet profile username associated with the policy.
+This is an individual NuGet login, not an email or the package author's company
+name. The package author remains Codevia Solutions s.r.o. Any environment
+protection rules must allow the release tag to deploy.
+
+After committing and pushing the release-ready README and workflow, publish by
+creating and pushing `v0.1.0`. The workflow checks that the tag matches the package
+version, runs the official vectors and both packed consumers, checks the package
+metadata and checksum, and obtains an ephemeral credential with `NuGet/login@v1`
+immediately before pushing. A failure is not silently treated as a successful
+duplicate publish. Confirm the workflow result and the NuGet listing afterward.
+
+GitHub release creation remains a separate action. The workflow does not create
+a GitHub release or change repository contents. For later package versions,
+update the explicitly pinned package version in the project, consumers, scripts,
+and release workflow before tagging.
 
 Suggested release title: `TNID.NET 0.1.0`.
 Suggested release body: “TNID.NET by Codevia Solutions s.r.o. implements the TNID 1.0

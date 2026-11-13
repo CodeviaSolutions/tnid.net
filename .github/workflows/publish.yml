@@ -1,0 +1,95 @@
+name: Publish NuGet
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nuget-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.repository == 'CodeviaSolutions/tnid.net'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Check release tag matches package version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+          version = ET.parse('src/TNID.NET/TNID.NET.csproj').findtext('PropertyGroup/Version')
+          expected = f'v{version}'
+          if os.environ['RELEASE_TAG'] != expected:
+              raise SystemExit(f'Release tag must be {expected}.')
+          PY
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            11.0.100
+      - name: Download official vectors for external comparison
+        run: curl --fail --location --retry 3 https://tnid.info/test-vectors.json --output "$RUNNER_TEMP/tnid-test-vectors.json"
+      - name: Verify and pack Release
+        run: bash scripts/verify.sh --net11 | tee artifacts/release-verification.log
+        shell: bash
+        env:
+          TNID_TEST_VECTORS: ${{ runner.temp }}/tnid-test-vectors.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nuget-release
+          if-no-files-found: error
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.sha256
+            artifacts/*.log
+            artifacts/sdk-*.txt
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment: nuget
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nuget-release
+          path: artifacts
+      - name: Check verified package checksum
+        working-directory: artifacts
+        run: sha256sum --check TNID.NET.0.1.0.nupkg.sha256
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Check NuGet username configuration
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if [[ -z "$NUGET_USER" ]]; then
+            echo 'Set the NUGET_USER variable to your NuGet profile username.' >&2
+            exit 1
+          fi
+      - name: Authenticate to NuGet with GitHub OIDC
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ vars.NUGET_USER }}
+      - name: Publish verified package
+        env:
+          NUGET_TEMP_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          dotnet nuget push artifacts/TNID.NET.0.1.0.nupkg \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key "$NUGET_TEMP_KEY"
