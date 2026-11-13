@@ -2,14 +2,14 @@
 
 A small C# implementation of the [TNID 1.0 core format](https://github.com/mkeedlinger/tnid/blob/e7a1d5913ef012dfb9aa3a731e9dba02c7628982/spec.md), authored and published by **Codevia Solutions s.r.o.** MIT licensed, single-targeted to `net10.0`, with zero third-party dependencies.
 
-The local `0.1.0` package is a verification candidate. The specification and license are pinned, and the applicable official vectors pass. The actual package also passes on .NET 11.0.0 using SDK 11.0.100, with NuGet selecting its net10.0 asset. Package publishing rights remain unverified; see [verification results](docs/VERIFICATION.md). No public release has been made.
+The specification and license are pinned, and the applicable official conformance vectors pass. The packed library is verified with .NET 10 and .NET 11 consumers; SDK 11.0.100 selects the package's `net10.0` asset for the .NET 11 consumer. See the [verification results](https://github.com/CodeviaSolutions/tnid.net/blob/main/docs/VERIFICATION.md).
 
 ## Use
 
-The requested package ID is `TNID.NET`. A public page/API listing check returned HTTP 404; this does not establish registration or publishing rights. For the local candidate:
+Install [TNID.NET from NuGet](https://www.nuget.org/packages/TNID.NET):
 
 ```sh
-dotnet add package TNID.NET --version 0.1.0 --source /absolute/path/to/tnid.net/artifacts
+dotnet add package TNID.NET --version 0.1.0
 ```
 
 ```csharp
@@ -107,4 +107,4 @@ bash scripts/verify.sh --net11
 
 This requires SDK 11.0.100, records its version, and runs a `net11.0` consumer against the same package while checking that NuGet selected `lib/net10.0/TNID.NET.dll` for compilation and execution. CI is configured to perform both consumer checks. To verify the existing archive without rebuilding or repacking it, run `bash scripts/verify-package.sh net11.0`. No older target is included; adding one requires a concrete consumer need and the same API and wire checks.
 
-The first release covers the core format. Source generators, encryption, blocklist filtering, serializers, ORM integrations, and framework packages are deferred. See [provenance](NOTICE.md), [external-vector instructions](tests/EXTERNAL-VECTORS.md), and [release steps](docs/RELEASING.md).
+The first release covers the core format. Source generators, encryption, blocklist filtering, serializers, ORM integrations, and framework packages are deferred. See [provenance](https://github.com/CodeviaSolutions/tnid.net/blob/main/NOTICE.md), [external-vector instructions](https://github.com/CodeviaSolutions/tnid.net/blob/main/tests/EXTERNAL-VECTORS.md), and [release steps](https://github.com/CodeviaSolutions/tnid.net/blob/main/docs/RELEASING.md).
